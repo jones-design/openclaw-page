@@ -1,0 +1,119 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500,400&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+  --font-heading: var(--app-font-heading);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --border: 220 13% 88%;
+  --card: 0 0% 98%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 5 95% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 14% 94%;
+  --secondary-foreground: 222 47% 20%;
+  --muted: 220 14% 94%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 5 95% 55%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 85% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 220 13% 88%;
+  --ring: 5 95% 55%;
+  --chart-1: 5 95% 55%;
+  --chart-2: 220 70% 60%;
+  --chart-3: 160 60% 45%;
+  --chart-4: 40 80% 50%;
+  --chart-5: 280 60% 55%;
+
+  --app-font-sans: 'Satoshi', 'Inter', sans-serif;
+  --app-font-mono: 'JetBrains Mono', monospace;
+  --app-font-heading: 'Clash Display', sans-serif;
+  --radius: .375rem;
+}
+
+.dark {
+  --background: 237 60% 3%;
+  --foreground: 220 20% 92%;
+  --border: 220 15% 14%;
+  --card: 237 40% 5%;
+  --card-foreground: 220 20% 92%;
+  --popover: 237 40% 5%;
+  --popover-foreground: 220 20% 92%;
+  --primary: 5 95% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 237 30% 10%;
+  --secondary-foreground: 220 20% 80%;
+  --muted: 237 25% 8%;
+  --muted-foreground: 220 15% 50%;
+  --accent: 5 95% 60%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 85% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 220 15% 18%;
+  --ring: 5 95% 60%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply font-sans antialiased bg-background text-foreground; }
+}
+
+.font-heading { font-family: var(--app-font-heading); }
+
+/* Particle twinkle */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.6; }
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  animation: twinkle var(--dur, 3s) ease-in-out infinite;
+  animation-delay: var(--del, 0s);
+}
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
