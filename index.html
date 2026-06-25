@@ -21,5 +21,94 @@
   </head>
   <body>
     <div id="root"></div>
+  
+<script>
+(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+    img[alt="OpenClaw 標誌"]{width:60px!important;height:60px!important;max-width:60px!important;max-height:60px!important;}
+    html{scroll-behavior:smooth;}
+    .oc-generated-doc-section{margin-top:2.5rem;padding:1.25rem;border:1px solid hsl(var(--border));border-radius:0.75rem;background:hsl(var(--card)/0.55);}
+    .oc-generated-doc-section h2{font-size:1.35rem;font-weight:800;margin-bottom:.75rem;color:hsl(var(--foreground));}
+    .oc-generated-doc-section p{font-size:.875rem;line-height:1.8;color:hsl(var(--muted-foreground));margin:.25rem 0;}
+    .oc-generated-doc-section code{font-size:.75rem;border:1px solid hsl(var(--border));border-radius:.375rem;padding:.125rem .375rem;background:hsl(var(--background));color:hsl(var(--foreground));}
+  `;
+  document.head.appendChild(style);
+
+  const textMap = {
+    '開始使用':'quick-start','安裝':'quick-start','頻道':'control-ui','代理':'config','功能':'capabilities','ClawHub':'deeper','模型':'deeper','平台':'deeper','Gateway & Ops':'how-it-works','參考':'start','說明':'deeper',
+    'OpenClaw':'what-is','展示':'how-it-works','引導設定總覽':'start','引導設定（CLI）':'quick-start','引導設定（macOS 應用）':'quick-start','個人助理設定':'config','CLI 設定參考':'config','CLI 自動化':'deeper'
+  };
+  const generated = [
+    ['quick-start','快速開始','安裝 Node 24，取得 API 金鑰，啟動 OpenClaw Gateway，然後連接你要使用的聊天頻道。','建議指令：npm install、openclaw onboard、openclaw gateway start。'],
+    ['control-ui','控制面板','使用控制 UI 管理頻道、會話、代理、節點與設定。若從文件導覽列進入此區，會停在這個說明段落。','可從本機 Gateway 開啟瀏覽器控制面板。'],
+    ['config','設定（選用）','這裡集中說明 API 金鑰、模型提供者、頻道插件與 CLI 參數。','建議先完成基本啟動，再回來調整進階設定。'],
+    ['start','從這裡開始','第一次部署請依序完成：安裝環境、執行引導設定、啟動 Gateway、連接頻道、測試訊息。','如果是 GitHub Pages 靜態版，這些連結會停留在本文件內，不會跳到失效外部網址。'],
+    ['deeper','深入了解','進階內容包含多代理路由、ClawHub 插件、生態系統、模型提供者、行動節點與自動化工作流程。','相關頁面可使用上方選單前往「生態系統」、「整合」與「部落格」。']
+  ];
+  function ensureDocSections(){
+    if(location.pathname !== '/docs') return;
+    const main = document.querySelector('main .min-w-0') || document.querySelector('main');
+    if(!main || document.getElementById('quick-start')) return;
+    const anchor = document.getElementById('capabilities') || main.lastElementChild;
+    generated.forEach(([id,title,body,note])=>{
+      const sec=document.createElement('section');
+      sec.id=id;
+      sec.className='oc-generated-doc-section';
+      sec.innerHTML='<h2>'+title+'</h2><p>'+body+'</p><p>'+note+'</p>';
+      anchor.parentNode.insertBefore(sec, anchor.nextSibling);
+    });
+  }
+  function scrollToId(id){
+    ensureDocSections();
+    const el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function patchLinks(){
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      if(a.dataset.ocFixed) return;
+      a.dataset.ocFixed='1';
+      a.addEventListener('click', function(e){
+        const id=this.getAttribute('href').slice(1);
+        if(!id) return;
+        if(location.pathname !== '/docs') return;
+        e.preventDefault();
+        history.replaceState(null,'','/docs#'+id);
+        scrollToId(id);
+      });
+    });
+    document.querySelectorAll('a[href^="/docs#"]').forEach(a=>{
+      if(a.dataset.ocFixed2) return;
+      a.dataset.ocFixed2='1';
+      a.removeAttribute('target');
+      a.addEventListener('click', function(e){
+        const id=this.getAttribute('href').split('#')[1];
+        if(location.pathname === '/docs'){
+          e.preventDefault();
+          history.replaceState(null,'','/docs#'+id);
+          scrollToId(id);
+        }
+      });
+    });
+    if(location.pathname === '/docs'){
+      document.querySelectorAll('button').forEach(btn=>{
+        const txt=(btn.textContent||'').trim();
+        const id=textMap[txt];
+        if(!id || btn.dataset.ocBtnFixed) return;
+        btn.dataset.ocBtnFixed='1';
+        btn.addEventListener('click', function(){
+          setTimeout(()=>{ history.replaceState(null,'','/docs#'+id); scrollToId(id); },0);
+        });
+      });
+    }
+  }
+  function run(){ ensureDocSections(); patchLinks(); if(location.pathname === '/docs' && location.hash){ setTimeout(()=>scrollToId(location.hash.slice(1)), 100); } }
+  const mo=new MutationObserver(run);
+  mo.observe(document.documentElement,{childList:true,subtree:true});
+  window.addEventListener('load',run);
+  setTimeout(run,300);
+  setTimeout(run,1000);
+})();
+</script>
   </body>
 </html>
